@@ -756,15 +756,9 @@
         <div class="form-group">
           <label>Online-Beratung möglich?</label>
           <div class="checkbox-group" id="group-online">
-            <label class="checkbox-chip">
-              <input type="checkbox" value="Ja"> Ja, Online
-            </label>
-            <label class="checkbox-chip">
-              <input type="checkbox" value="Nur vor Ort"> Nur vor Ort
-            </label>
-            <label class="checkbox-chip">
-              <input type="checkbox" value="Beides"> Beides
-            </label>
+            <div class="checkbox-chip" data-value="Ja">Ja, Online</div>
+            <div class="checkbox-chip" data-value="Nur vor Ort">Nur vor Ort</div>
+            <div class="checkbox-chip" data-value="Beides">Beides</div>
           </div>
         </div>
       </div>
@@ -780,12 +774,8 @@
         <div class="form-group">
           <label>Kostenloses Angebot zum Kennenlernen?</label>
           <div class="checkbox-group" id="group-kostenlos">
-            <label class="checkbox-chip">
-              <input type="checkbox" value="Ja, ich biete ein kostenloses Kennenlernen an"> Ja, ich biete das an
-            </label>
-            <label class="checkbox-chip">
-              <input type="checkbox" value="Nein"> Nein
-            </label>
+            <div class="checkbox-chip" data-value="Ja, ich biete ein kostenloses Kennenlernen an">Ja, ich biete das an</div>
+            <div class="checkbox-chip" data-value="Nein">Nein</div>
           </div>
         </div>
       </div>
@@ -833,12 +823,9 @@ function toggleAcc(el) {
 }
 
 // ── CHECKBOX CHIPS ──
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.checkbox-chip').forEach(function(chip) {
-    chip.addEventListener('click', function(e) {
-      e.preventDefault();
-      chip.classList.toggle('checked');
-    });
+document.querySelectorAll('.checkbox-chip').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    chip.classList.toggle('checked');
   });
 });
 
@@ -855,10 +842,10 @@ async function submitForm() {
   }
 
   const online = [...document.querySelectorAll('#group-online .checkbox-chip.checked')]
-    .map(c => c.querySelector('input').value).join(', ') || '—';
+    .map(c => c.dataset.value).join(', ') || '—';
 
   const kostenloses = [...document.querySelectorAll('#group-kostenlos .checkbox-chip.checked')]
-    .map(c => c.querySelector('input').value).join(', ') || '—';
+    .map(c => c.dataset.value).join(', ') || '—';
 
   const data = {
     Name: name,
