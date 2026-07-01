@@ -604,7 +604,8 @@
     </p>
   </div>
 
-  <!-- VORTEILE -->
+  <!-- VORTEILE: ausgeblendet bis Plattform bereit. Zum Einblenden: style="display:none" entfernen -->
+  <div style="display:none">
   <div style="margin-bottom:28px; animation: fadeUp 0.7s ease 0.25s both;">
     <h2 class="section-title">Was das für dich bedeutet</h2>
     <p class="section-sub">Tippe auf einen Punkt, um mehr zu erfahren.</p>
@@ -612,8 +613,8 @@
 
   <div class="accordion">
 
-    <div class="acc-item" onclick="toggleAcc(this)">
-      <div class="acc-trigger">
+    <div class="acc-item">
+      <div class="acc-trigger" onclick="toggleAcc(this.closest('.acc-item'))">
         <div class="acc-icon pink">🌱</div>
         <div class="acc-label">
           <h3>Eltern kommen zu dir — ohne Akquise</h3>
@@ -632,8 +633,8 @@
       </div>
     </div>
 
-    <div class="acc-item" onclick="toggleAcc(this)">
-      <div class="acc-trigger">
+    <div class="acc-item">
+      <div class="acc-trigger" onclick="toggleAcc(this.closest('.acc-item'))">
         <div class="acc-icon gold">📅</div>
         <div class="acc-label">
           <h3>Deine Events füllen sich</h3>
@@ -652,8 +653,8 @@
       </div>
     </div>
 
-    <div class="acc-item" onclick="toggleAcc(this)">
-      <div class="acc-trigger">
+    <div class="acc-item">
+      <div class="acc-trigger" onclick="toggleAcc(this.closest('.acc-item'))">
         <div class="acc-icon forest">📱</div>
         <div class="acc-label">
           <h3>Sichtbarkeit auf Social Media</h3>
@@ -672,8 +673,8 @@
       </div>
     </div>
 
-    <div class="acc-item" onclick="toggleAcc(this)">
-      <div class="acc-trigger">
+    <div class="acc-item">
+      <div class="acc-trigger" onclick="toggleAcc(this.closest('.acc-item'))">
         <div class="acc-icon pink">🤝</div>
         <div class="acc-label">
           <h3>Wir sind ein Netzwerk — kein Wettbewerb</h3>
@@ -693,6 +694,7 @@
     </div>
 
   </div>
+  </div><!-- /VORTEILE -->
 
   <!-- VISION -->
   <div class="vision-card">
@@ -806,8 +808,9 @@
       <h3>Herzlich willkommen im Netzwerk!</h3>
       <p>
         Dein Eintrag ist angekommen. <em>Danke, dass du dabei bist.</em><br><br>
-        Ich melde mich persönlich bei dir — und freue mich darauf, gemeinsam mit dir Familien zu begleiten, bevor Probleme entstehen.<br><br>
-        Bis bald,<br><strong style="color:var(--gold);">Jamila</strong>
+        Ich bin gerade dabei, alles aufzubauen — mit viel Herzblut und Sorgfalt. Du wirst eines der Ersten sein, die ein Update erhalten, sobald es so weit ist.<br><br>
+        Danke, dass du Teil von etwas Besonderem bist.<br><br>
+        Herzliche Grüsse,<br><strong style="color:var(--gold);">Jamila</strong>
       </p>
     </div>
   </div>
