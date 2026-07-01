@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Einladung — Wir bauen etwas Besonderes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1a3d3c;
+    --forest-mid: #234e4d;
+    --ivory: #FAF8F3;
+    --ivory-warm: #F2EDE3;
+    --pulse: #E02B7D;
+    --pulse-soft: rgba(224,43,125,0.10);
+    --gold: #C9A84C;
+    --gold-soft: rgba(201,168,76,0.12);
+    --text-main: #1a2e2d;
+    --text-soft: #5a7170;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ivory);
+    color: var(--text-main);
+    min-height: 100vh;
+  }
+
+  /* NEURON CANVAS */
+  #canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.25;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  /* HEADER */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 0 0;
+    gap: 14px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .logo-circle {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid var(--pulse);
+    overflow: hidden;
+    animation: pulse-ring 3s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  .logo-circle img { width:100%; height:100%; object-fit:cover; }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--forest);
+    line-height: 1.1;
+  }
+
+  .brand-sub {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pulse);
+  }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 40px 0 32px;
+    animation: fadeUp 0.7s ease 0.1s both;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--pulse);
+    background: var(--pulse-soft);
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 7vw, 52px);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--forest);
+    margin-bottom: 10px;
+  }
+
+  .hero h1 strong {
+    font-weight: 700;
+    font-style: italic;
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--text-soft);
+    line-height: 1.75;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* GREETING CARD */
+  .greeting {
+    background: linear-gradient(135deg, var(--forest) 0%, var(--forest-mid) 60%, #1a4a3a 100%);
+    border-radius: 28px;
+    padding: 32px 28px;
+    color: white;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(26,61,60,0.22);
+    animation: fadeUp 0.7s ease 0.2s both;
+  }
+
+  .greeting::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(224,43,125,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .greeting-from {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: block;
+    position: relative;
+  }
+
+  .greeting h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: white;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .greeting h2 em { color: var(--gold); font-style: italic; }
+
+  .greeting p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.85);
+    position: relative;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--forest);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .section-sub {
+    font-size: 13px;
+    color: var(--text-soft);
+    text-align: center;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  /* BENEFIT ACCORDION */
+  .accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 36px;
+    animation: fadeUp 0.7s ease 0.3s both;
+  }
+
+  .acc-item {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid rgba(26,61,60,0.08);
+    box-shadow: 0 4px 16px rgba(26,61,60,0.05);
+    overflow: hidden;
+    transition: box-shadow 0.25s ease;
+  }
+
+  .acc-item.open { box-shadow: 0 8px 32px rgba(26,61,60,0.1); }
+
+  .acc-trigger {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .acc-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .acc-icon.pink { background: var(--pulse-soft); }
+  .acc-icon.gold { background: var(--gold-soft); }
+  .acc-icon.forest { background: rgba(26,61,60,0.07); }
+
+  .acc-label {
+    flex: 1;
+  }
+
+  .acc-label h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--forest);
+    line-height: 1.2;
+  }
+
+  .acc-label span {
+    font-size: 11px;
+    color: var(--text-soft);
+    margin-top: 2px;
+    display: block;
+  }
+
+  .acc-arrow {
+    font-size: 14px;
+    color: var(--text-soft);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .acc-item.open .acc-arrow { transform: rotate(180deg); }
+
+  .acc-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .acc-item.open .acc-body { max-height: 600px; }
+
+  .acc-content {
+    padding: 0 20px 20px 78px;
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.75;
+  }
+
+  .acc-content ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .acc-content ul li {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .acc-content ul li::before {
+    content: '→';
+    color: var(--pulse);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .acc-content ul li strong { color: var(--text-main); }
+
+  /* VISION CARD */
+  .vision-card {
+    background: var(--ivory-warm);
+    border-radius: 24px;
+    padding: 28px 24px;
+    border: 1px solid rgba(26,61,60,0.08);
+    margin-bottom: 36px;
+    animation: fadeUp 0.7s ease 0.4s both;
+  }
+
+  .vision-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--forest);
+    margin-bottom: 14px;
+  }
+
+  .vision-card p {
+    font-size: 13.5px;
+    color: var(--text-soft);
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .vision-card p:last-child { margin-bottom: 0; }
+
+  .vision-card strong { color: var(--forest); }
+
+  .quote-bar {
+    border-left: 3px solid var(--pulse);
+    padding-left: 16px;
+    margin: 16px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--forest);
+    line-height: 1.5;
+  }
+
+  /* FORM */
+  .form-section {
+    animation: fadeUp 0.7s ease 0.5s both;
+  }
+
+  .form-card {
+    background: white;
+    border-radius: 28px;
+    padding: 32px 28px;
+    border: 1px solid rgba(26,61,60,0.08);
+    box-shadow: 0 8px 40px rgba(26,61,60,0.08);
+    margin-bottom: 20px;
+  }
+
+  .form-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--forest);
+    margin-bottom: 6px;
+  }
+
+  .form-card p {
+    font-size: 12.5px;
+    color: var(--text-soft);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--forest);
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 13px 16px;
+    border: 1.5px solid rgba(26,61,60,0.12);
+    border-radius: 14px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-main);
+    background: var(--ivory);
+    outline: none;
+    transition: border-color 0.2s ease;
+    width: 100%;
+    -webkit-appearance: none;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--forest);
+    background: white;
+  }
+
+  .form-group textarea { resize: vertical; min-height: 90px; }
+
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .checkbox-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1.5px solid rgba(26,61,60,0.12);
+    background: var(--ivory);
+    font-size: 12px;
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .checkbox-chip input { display: none; }
+
+  .checkbox-chip.checked {
+    background: var(--forest);
+    color: white;
+    border-color: var(--forest);
+  }
+
+  .btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, var(--pulse), #c0206a);
+    color: white;
+    border: none;
+    border-radius: 18px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(224,43,125,0.3);
+    transition: all 0.25s ease;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-submit:active { transform: scale(0.97); }
+
+  /* SUCCESS STATE */
+  .success-card {
+    display: none;
+    background: linear-gradient(135deg, var(--forest), var(--forest-mid));
+    border-radius: 28px;
+    padding: 40px 28px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 20px 60px rgba(26,61,60,0.25);
+  }
+
+  .success-card.visible { display: block; animation: fadeUp 0.5s ease both; }
+
+  .success-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .success-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 12px;
+  }
+
+  .success-card p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.82);
+    line-height: 1.75;
+  }
+
+  .success-card em { color: var(--gold); font-style: italic; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 24px 0 0;
+    font-size: 11px;
+    color: var(--text-soft);
+    line-height: 1.7;
+    animation: fadeUp 0.7s ease 0.6s both;
+  }
+
+  .footer a { color: var(--forest); text-decoration: none; font-weight: 600; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse-ring {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(224,43,125,0.3); }
+    50% { box-shadow: 0 0 0 7px rgba(224,43,125,0); }
+  }
+
+  @media (min-width: 600px) {
+    .form-row-2 { flex-direction: row; }
+    .form-row-2 .form-group { flex: 1; }
+    .acc-content { padding-left: 78px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div class="wrap">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="logo-circle">
+      <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg" width="52" height="52" style="display:block;">
+        <!-- Neuron body -->
+        <circle cx="26" cy="26" r="6" fill="#E02B7D" opacity="0.9"/>
+        <!-- Dendrites -->
+        <line x1="26" y1="20" x2="26" y2="8" stroke="#1a3d3c" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="26" cy="7" r="2" fill="#C9A84C"/>
+        <line x1="26" y1="20" x2="14" y2="11" stroke="#1a3d3c" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="13" cy="10" r="2" fill="#C9A84C"/>
+        <line x1="26" y1="20" x2="38" y2="11" stroke="#1a3d3c" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="39" cy="10" r="2" fill="#C9A84C"/>
+        <!-- Axon -->
+        <line x1="26" y1="32" x2="26" y2="44" stroke="#1a3d3c" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="26" y1="44" x2="18" y2="48" stroke="#1a3d3c" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="17" cy="49" r="2" fill="#E02B7D" opacity="0.7"/>
+        <line x1="26" y1="44" x2="34" y2="48" stroke="#1a3d3c" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="35" cy="49" r="2" fill="#E02B7D" opacity="0.7"/>
+        <!-- Side dendrites -->
+        <line x1="20" y1="26" x2="8" y2="22" stroke="#1a3d3c" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="7" cy="21" r="2" fill="#C9A84C"/>
+        <line x1="32" y1="26" x2="44" y2="22" stroke="#1a3d3c" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="45" cy="21" r="2" fill="#C9A84C"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+    <span class="brand-name">Biologisch logisch oder?</span>
+    <span class="brand-sub">Eine Einladung von Jamila</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="hero-eyebrow">✦ Eine Einladung von Jamila</span>
+    <h1>Wir bauen etwas,<br>das <strong>Eltern entlastet</strong><br>— bevor Probleme entstehen.</h1>
+    <p class="hero-sub">
+      Und ich möchte, dass du von Anfang an dabei bist.
+    </p>
+  </div>
+
+  <!-- GREETING -->
+  <div class="greeting">
+    <span class="greeting-from">✦ Von Herz zu Herz — Jamila</span>
+    <h2>
+      Herzlichen Glückwunsch —<br>
+      du bist genau <em>zur richtigen Zeit</em> hier.
+    </h2>
+    <p>
+      Stell dir vor: Eine Plattform, auf der Eltern das geballte Wissen von uns allen finden — an einem einzigen, ruhigen Ort. Kein Suchen mehr. Kein Scrollen durch 50 Accounts. Eltern kommen zu uns, weil sie Frieden möchten. Und wir sind da — gemeinsam, sichtbar, wirkungsvoll.<br><br>
+      Ich baue diese Plattform gerade auf. Und ich möchte dich einladen, von Anfang an Teil davon zu sein — als eine der ersten Beraterinnen, die Eltern auf diesem Weg begleiten.
+    </p>
+  </div>
+
+  <!-- VORTEILE -->
+  <div style="margin-bottom:28px; animation: fadeUp 0.7s ease 0.25s both;">
+    <h2 class="section-title">Was das für dich bedeutet</h2>
+    <p class="section-sub">Tippe auf einen Punkt, um mehr zu erfahren.</p>
+  </div>
+
+  <div class="accordion">
+
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-trigger">
+        <div class="acc-icon pink">🌱</div>
+        <div class="acc-label">
+          <h3>Eltern kommen zu dir — ohne Akquise</h3>
+          <span>Dein Profil arbeitet für dich</span>
+        </div>
+        <span class="acc-arrow">▾</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-content">
+          <ul>
+            <li>Ein intelligentes Match-System führt Familien direkt zu dir — basierend auf ihren Themen und deinen Spezialisierungen.</li>
+            <li><strong>Du musst nicht mehr werben.</strong> Eltern finden dich, weil die Plattform sie zu dir führt.</li>
+            <li>Qualifizierte Anfragen: Ein Chat-Limit filtert vor — zu dir kommen nur Eltern, die wirklich bereit sind.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-trigger">
+        <div class="acc-icon gold">📅</div>
+        <div class="acc-label">
+          <h3>Deine Events füllen sich</h3>
+          <span>Workshops, Kurse, Online-Angebote</span>
+        </div>
+        <span class="acc-arrow">▾</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-content">
+          <ul>
+            <li>Trage deine Workshops und Online-Kurse direkt in die Plattform ein.</li>
+            <li><strong>Eltern sehen deine Events</strong> und buchen direkt über deinen Link — ohne Umwege.</li>
+            <li>Die Plattform zeigt Eltern, warum dein Event für sie relevant ist — biologisch erklärt, nicht verkäuferisch.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-trigger">
+        <div class="acc-icon forest">📱</div>
+        <div class="acc-label">
+          <h3>Sichtbarkeit auf Social Media</h3>
+          <span>Ich stelle dich und deine Themen vor</span>
+        </div>
+        <span class="acc-arrow">▾</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-content">
+          <ul>
+            <li><strong>Ich erstelle Content zu deinen Themen</strong> und stelle dich als Expertin auf meinen sozialen Kanälen vor.</li>
+            <li>Eltern lernen dich kennen, bevor sie dich brauchen — so entsteht echtes Vertrauen.</li>
+            <li>Gemeinsam erreichen wir mehr Familien, als jede von uns alleine je könnte.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-trigger">
+        <div class="acc-icon pink">🤝</div>
+        <div class="acc-label">
+          <h3>Wir sind ein Netzwerk — kein Wettbewerb</h3>
+          <span>Gemeinsam stärker für Familien</span>
+        </div>
+        <span class="acc-arrow">▾</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-content">
+          <ul>
+            <li>Das geballte Wissen aller Beraterinnen — an einem Ort. Eltern müssen nicht mehr wählen, wem sie folgen.</li>
+            <li><strong>Jede Spezialisierung ergänzt die andere.</strong> Zusammen decken wir alle sensiblen Phasen ab.</li>
+            <li>Wir werden von Ärzten, Hebammen und Fachstellen empfohlen — als gemeinsame Plattform.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VISION -->
+  <div class="vision-card">
+    <h3>Die Vision dahinter</h3>
+    <p>
+      Ich träume von einer Welt, in der Eltern <strong>nicht erst in der Krise</strong> nach Hilfe suchen müssen. Wo biologisches Wissen so selbstverständlich ist wie ein Erste-Hilfe-Kurs. Wo Fachkräfte wie wir — zertifiziert, erfahren, mit Herz — sichtbar sind, bevor Familien in Not geraten.
+    </p>
+    <div class="quote-bar">
+      "Kinder zu haben soll ein Segen sein — nicht eine Quelle von Erschöpfung und Unsicherheit."
+    </div>
+    <p>
+      Diese Plattform ist die Schnittstelle zwischen frühkindlicher Biologie, präventiver Gesundheitsförderung und echten Fachkräften. Und du bist ein Teil davon — <strong>von Anfang an.</strong>
+    </p>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-section">
+    <div class="form-card" id="form-card">
+      <h3>Ich bin dabei ✦</h3>
+      <p>Trage dich jetzt in die Beraterinnen-Liste ein. Alles andere besprechen wir gemeinsam — du verpflichtest dich zu nichts.</p>
+
+      <div class="form-row form-row-2">
+        <div class="form-group">
+          <label>Dein Name *</label>
+          <input type="text" id="f-name" placeholder="Vorname Nachname" required>
+        </div>
+        <div class="form-group">
+          <label>Deine Fachrichtung *</label>
+          <input type="text" id="f-fach" placeholder="z.B. EPM-Pädagogin, Hello Nappy…" required>
+        </div>
+      </div>
+
+      <div class="form-row form-row-2">
+        <div class="form-group">
+          <label>E-Mail *</label>
+          <input type="email" id="f-email" placeholder="deine@email.ch" required>
+        </div>
+        <div class="form-group">
+          <label>Telefon (optional)</label>
+          <input type="tel" id="f-tel" placeholder="+41 …">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Wohnort / Region *</label>
+          <input type="text" id="f-region" placeholder="z.B. Bern / Solothurn" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Deine Ausbildungen</label>
+          <input type="text" id="f-ausbildung" placeholder="z.B. Kindergarten, Babymassage, EPM…">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Online-Beratung möglich?</label>
+          <div class="checkbox-group" id="group-online">
+            <label class="checkbox-chip" onclick="toggleChip(this)">
+              <input type="checkbox" value="Ja"> Ja, Online
+            </label>
+            <label class="checkbox-chip" onclick="toggleChip(this)">
+              <input type="checkbox" value="Nur vor Ort"> Nur vor Ort
+            </label>
+            <label class="checkbox-chip" onclick="toggleChip(this)">
+              <input type="checkbox" value="Beides"> Beides
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Deine Website (optional)</label>
+          <input type="url" id="f-web" placeholder="https://…">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Kostenloses Angebot zum Kennenlernen?</label>
+          <div class="checkbox-group" id="group-kostenlos">
+            <label class="checkbox-chip" onclick="toggleChip(this)">
+              <input type="checkbox" value="Ja, ich biete ein kostenloses Kennenlernen an"> Ja, ich biete das an
+            </label>
+            <label class="checkbox-chip" onclick="toggleChip(this)">
+              <input type="checkbox" value="Nein"> Nein
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Bemerkungen / Was du noch sagen möchtest</label>
+          <textarea id="f-bemerk" placeholder="Schreib einfach, was dir auf dem Herzen liegt…"></textarea>
+        </div>
+      </div>
+
+      <button class="btn-submit" onclick="submitForm()">
+        <span>✦</span> Ich bin dabei — Eintragen
+      </button>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-card" id="success-card">
+      <div class="success-icon">🌱</div>
+      <h3>Herzlich willkommen im Netzwerk!</h3>
+      <p>
+        Dein Eintrag ist angekommen. <em>Danke, dass du dabei bist.</em><br><br>
+        Ich melde mich persönlich bei dir — und freue mich darauf, gemeinsam mit dir Familien zu begleiten, bevor Probleme entstehen.<br><br>
+        Bis bald,<br><strong style="color:var(--gold);">Jamila</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>
+      Diese Einladung ist vertraulich und nur für Fachkräfte und Ausgebildete / in Ausbildung von Rita Messmer bestimmt.<br>
+      Fragen? Schreib mir direkt: <a href="mailto:sellehcyes.ssiws@gmail.com">sellehcyes.ssiws@gmail.com</a><br><br>
+      nDSG-konform · Schweiz · <a href="datenschutz.html" style="font-weight:normal; text-decoration:underline;">Datenschutzerklärung</a>
+    </p>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── ACCORDION ──
+function toggleAcc(el) {
+  el.classList.toggle('open');
+}
+
+// ── CHECKBOX CHIPS ──
+function toggleChip(el) {
+  el.classList.toggle('checked');
+}
+
+// ── FORM SUBMIT → Google Sheets via Apps Script ──
+async function submitForm() {
+  const name = document.getElementById('f-name').value.trim();
+  const fach = document.getElementById('f-fach').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const region = document.getElementById('f-region').value.trim();
+
+  if (!name || !fach || !email || !region) {
+    alert('Bitte fülle Name, Fachrichtung, E-Mail und Region aus.');
+    return;
+  }
+
+  const online = [...document.querySelectorAll('#group-online .checkbox-chip.checked')]
+    .map(c => c.querySelector('input').value).join(', ') || '—';
+
+  const kostenloses = [...document.querySelectorAll('#group-kostenlos .checkbox-chip.checked')]
+    .map(c => c.querySelector('input').value).join(', ') || '—';
+
+  const data = {
+    Name: name,
+    Fachrichtung: fach,
+    Ausbildungen: document.getElementById('f-ausbildung').value.trim(),
+    'Kontakt (E-Mail/Telefon)': email + (document.getElementById('f-tel').value.trim() ? ' / ' + document.getElementById('f-tel').value.trim() : ''),
+    'Wohnort/Region': region,
+    Bemerkungen: document.getElementById('f-bemerk').value.trim(),
+    'Onlineberatungen Ja/Nein?': online,
+    Website: document.getElementById('f-web').value.trim(),
+    'Kostenloses Angebot zum kennen lernen': kostenloses
+  };
+
+  const btn = document.querySelector('.btn-submit');
+  btn.textContent = 'Wird eingetragen …';
+  btn.disabled = true;
+
+  try {
+    // Google Apps Script Web App URL
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymXMa7HLER-xXDNVTeU5PMJfWk7JqzCSMRjuDzk1rht2EDs2rrxBXfpVMip6NWJYXR/exec';
+
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    document.getElementById('form-card').style.display = 'none';
+    document.getElementById('success-card').classList.add('visible');
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
+  } catch (e) {
+    // Fallback: Mailto
+    const subject = encodeURIComponent('Neue Beraterin: ' + name);
+    const body = encodeURIComponent(
+      Object.entries(data).map(([k,v]) => k + ': ' + v).join('\n')
+    );
+    window.location.href = 'mailto:sellehcyes.ssiws@gmail.com?subject=' + subject + '&body=' + body;
+    document.getElementById('form-card').style.display = 'none';
+    document.getElementById('success-card').classList.add('visible');
+  }
+}
+
+// ── NEURON CANVAS ──
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let W, H, nodes = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function init() {
+  nodes = [];
+  const count = Math.floor((W * H) / 22000);
+  for (let i = 0; i < count; i++) {
+    nodes.push({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25,
+      r: Math.random() * 2 + 1
+    });
+  }
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  nodes.forEach(n => {
+    n.x += n.vx; n.y += n.vy;
+    if (n.x < 0 || n.x > W) n.vx *= -1;
+    if (n.y < 0 || n.y > H) n.vy *= -1;
+  });
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i].x - nodes[j].x;
+      const dy = nodes[i].y - nodes[j].y;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if (d < 130) {
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y);
+        ctx.strokeStyle = `rgba(26,61,60,${0.12*(1-d/130)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+  nodes.forEach(n => {
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(224,43,125,0.35)';
+    ctx.fill();
+  });
+  requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', () => { resize(); init(); });
+resize(); init(); draw();
+</script>
+</body>
+</html>
