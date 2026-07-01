@@ -451,7 +451,7 @@
     -webkit-user-select: none;
   }
 
-  .checkbox-chip input { display: none; }
+  .checkbox-chip input { display: none; pointer-events: none; }
 
   .checkbox-chip.checked {
     background: var(--forest);
@@ -756,13 +756,13 @@
         <div class="form-group">
           <label>Online-Beratung möglich?</label>
           <div class="checkbox-group" id="group-online">
-            <label class="checkbox-chip" onclick="toggleChip(this)">
+            <label class="checkbox-chip">
               <input type="checkbox" value="Ja"> Ja, Online
             </label>
-            <label class="checkbox-chip" onclick="toggleChip(this)">
+            <label class="checkbox-chip">
               <input type="checkbox" value="Nur vor Ort"> Nur vor Ort
             </label>
-            <label class="checkbox-chip" onclick="toggleChip(this)">
+            <label class="checkbox-chip">
               <input type="checkbox" value="Beides"> Beides
             </label>
           </div>
@@ -780,10 +780,10 @@
         <div class="form-group">
           <label>Kostenloses Angebot zum Kennenlernen?</label>
           <div class="checkbox-group" id="group-kostenlos">
-            <label class="checkbox-chip" onclick="toggleChip(this)">
+            <label class="checkbox-chip">
               <input type="checkbox" value="Ja, ich biete ein kostenloses Kennenlernen an"> Ja, ich biete das an
             </label>
-            <label class="checkbox-chip" onclick="toggleChip(this)">
+            <label class="checkbox-chip">
               <input type="checkbox" value="Nein"> Nein
             </label>
           </div>
@@ -833,9 +833,14 @@ function toggleAcc(el) {
 }
 
 // ── CHECKBOX CHIPS ──
-function toggleChip(el) {
-  el.classList.toggle('checked');
-}
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.checkbox-chip').forEach(function(chip) {
+    chip.addEventListener('click', function(e) {
+      e.preventDefault();
+      chip.classList.toggle('checked');
+    });
+  });
+});
 
 // ── FORM SUBMIT → Google Sheets via Apps Script ──
 async function submitForm() {
