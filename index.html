@@ -604,8 +604,8 @@
     </p>
   </div>
 
-  <!-- VORTEILE: ausgeblendet bis Plattform bereit. Zum Einblenden: style="display:none" entfernen -->
-  <div style="display:none">
+  <!-- VORTEILE: Titel und 2 aktive Karten sichtbar. Zum Einblenden der ausgeblendeten Karten: style="display:none" entfernen -->
+  <div>
   <div style="margin-bottom:28px; animation: fadeUp 0.7s ease 0.25s both;">
     <h2 class="section-title">Was das für dich bedeutet</h2>
     <p class="section-sub">Tippe auf einen Punkt, um mehr zu erfahren.</p>
@@ -613,7 +613,8 @@
 
   <div class="accordion">
 
-    <div class="acc-item">
+    <!-- KARTE AUSGEBLENDET: "Eltern kommen zu dir — ohne Akquise" — zum Einblenden: style="display:none" entfernen -->
+    <div class="acc-item" style="display:none">
       <div class="acc-trigger" onclick="toggleAcc(this.closest('.acc-item'))">
         <div class="acc-icon pink">🌱</div>
         <div class="acc-label">
@@ -633,7 +634,8 @@
       </div>
     </div>
 
-    <div class="acc-item">
+    <!-- KARTE AUSGEBLENDET: "Deine Events füllen sich" — zum Einblenden: style="display:none" entfernen -->
+    <div class="acc-item" style="display:none">
       <div class="acc-trigger" onclick="toggleAcc(this.closest('.acc-item'))">
         <div class="acc-icon gold">📅</div>
         <div class="acc-label">
